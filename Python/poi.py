@@ -53,7 +53,6 @@ class PoiPoi:
 	def load(self, file):
 		with open(file, 'r') as f:
 			read_data = re.sub(r"\s+", "", f.read())
-		f.closed
 		end = 0
 		ind=0
 		while ind < len(read_data):
@@ -86,6 +85,11 @@ def main(script, argv):
 			sys.exit()
 		elif opt == "-v":
 			print('Poi Language Interpreter V1.0')
+	try:
+		file_name = argv[0]
+	except IndexError:
+		print(script + ' <programfile>')
+		sys.exit(2)	
 	if os.path.isfile(argv[0]):
 		poi = PoiPoi()
 		poi.load(argv[0])
