@@ -73,6 +73,7 @@ class PoiPoi:
 			self.pc+=1
 
 def main(script, argv):
+	file_name = ''
 	try:
 		opts, args = getopt.getopt(argv,"hv",[])
 	except getopt.GetoptError:
@@ -90,9 +91,9 @@ def main(script, argv):
 	except IndexError:
 		print(script + ' <programfile>')
 		sys.exit(2)	
-	if os.path.isfile(argv[0]):
+	if os.path.isfile(file_name):
 		poi = PoiPoi()
-		poi.load(argv[0])
+		poi.load(file_name)
 		poi.run()
 	else:
 		print('File not found.')
