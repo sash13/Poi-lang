@@ -12,23 +12,23 @@ class PoiPoi:
 		self.index+=1
 	def backward(self):
 		self.index-=1
-	def inc(self, idx):
-		self.array[idx]+=1
-	def dec(self, idx):
-		self.array[idx]-=1
-	def put(self, idx):
-		print(chr(self.array[idx]),end ='')
-	def get(self, idx):
-		self.array[idx] = int(input())
-	def op(self, idx):
-		if self.array[idx] == 0:
+	def inc(self):
+		self.array[self.index]+=1
+	def dec(self):
+		self.array[self.index]-=1
+	def put(self):
+		print(chr(self.array[self.index]),end ='')
+	def get(self):
+		self.array[self.index] = int(input())
+	def op(self):
+		if self.array[self.index] == 0:
 			self.loop_count+=1
 			while self.loop_count:
 				self.pc+=1
 				if self.instructions[self.pc] == 'POi': self.loop_count+=1
 				if self.instructions[self.pc] == 'pOI': self.loop_count-=1
-	def cl(self, idx):
-		if self.array[idx] == 0:
+	def cl(self):
+		if self.array[self.index] == 0:
 			pass
 		else:
 			if self.instructions[self.pc] == 'pOI': 
@@ -41,15 +41,19 @@ class PoiPoi:
 
 	def lex(self, value):
 		cases = {
-			'Poi': lambda idx: self.forward(),	# >
-			'poI': lambda idx: self.backward(),	# <
-			'POI': lambda idx: self.inc(idx),	# +
-			'poi': lambda idx: self.dec(idx),	# -
-			'Poi!': lambda idx: self.put(idx),	# .
-			'Poi?': lambda idx: self.get(idx),	# ,
-			'POi': lambda idx: self.op(idx),	# [
-			'pOI': lambda idx: self.cl(idx)		# ]
-		}[value](self.index)
+			'Poi': lambda idx: self.forward(),		# >
+			'poI': lambda idx: self.backward(),		# <
+			'POI': lambda idx: self.inc(),			# +
+			'poi': lambda idx: self.dec(),			# -
+			'Poi!':lambda idx: self.put(),			# .
+			'Poi?':lambda idx: self.get(),			# ,
+			'POi': lambda idx: self.op(),			# [
+			'pOI': lambda idx: self.cl()			# ]
+		}
+		try:										# my bad
+			cases[value](None)
+		except:
+			print("\nUnrecognized op code: ", value)
 	def load(self, file):
 		with open(file, 'r') as f:
 			read_data = re.sub(r"\s+", "", f.read())
