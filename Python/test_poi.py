@@ -20,13 +20,13 @@ class PoiInterpreterTest(unittest.TestCase):
 	def testInterpreterIncOpCode(self):
 		self.p.index = 0
 		self.p.array[self.p.index] = 0
-		self.p.inc(self.p.index)
+		self.p.inc()
 		self.assertEqual(1, self.p.array[self.p.index])
 
 	def testInterpreterDecOpCode(self):
 		self.p.index = 0
 		self.p.array[self.p.index] = 1
-		self.p.dec(self.p.index)
+		self.p.dec()
 		self.assertEqual(0, self.p.array[self.p.index])
 
 if __name__ == '__main__':
