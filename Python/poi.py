@@ -1,5 +1,8 @@
 from __future__ import print_function
 import sys, re, getopt, os
+import click
+
+VERSION = '1.0'
 
 class PoiPoi:
 	def __init__(self):
@@ -27,6 +30,7 @@ class PoiPoi:
 				self.pc+=1
 				if self.instructions[self.pc] == 'POi': self.loop_count+=1
 				if self.instructions[self.pc] == 'pOI': self.loop_count-=1
+				
 	def cl(self, idx):
 		if self.array[idx] == 0:
 			pass
@@ -50,9 +54,9 @@ class PoiPoi:
 			'POi': lambda idx: self.op(idx),	# [
 			'pOI': lambda idx: self.cl(idx)		# ]
 		}[value](self.index)
+
 	def load(self, file):
-		with open(file, 'r') as f:
-			read_data = re.sub(r"\s+", "", f.read())
+		read_data = re.sub(r"\s+", "", file)
 		end = 0
 		ind=0
 		while ind < len(read_data):
@@ -72,31 +76,13 @@ class PoiPoi:
 			self.lex(self.instructions[self.pc])
 			self.pc+=1
 
-def main(script, argv):
-	file_name = ''
-	try:
-		opts, args = getopt.getopt(argv,"hv",[])
-	except getopt.GetoptError:
-		print(script + ' <programfile>')
-		sys.exit(2)	
-	for opt, arg in opts:
-		print(opt, arg )
-		if opt == '-h':
-			print(script + ' <programfile>')
-			sys.exit()
-		elif opt == "-v":
-			print('Poi Language Interpreter V1.0')
-	try:
-		file_name = argv[0]
-	except IndexError:
-		print(script + ' <programfile>')
-		sys.exit(2)	
-	if os.path.isfile(file_name):
-		poi = PoiPoi()
-		poi.load(file_name)
-		poi.run()
-	else:
-		print('File not found.')
+@click.command()
+@click.argument('programm_file', type=click.File('r'))
+@click.version_option(VERSION, '-V', '--version')
+def main(programm_file): 
+	poi = PoiPoi()
+	poi.load(programm_file.read())
+	poi.run()
 
-if __name__ == "__main__":
-	main(sys.argv[0], sys.argv[1:])
+if __name__ == '__main__':
+	main()
